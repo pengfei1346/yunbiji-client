@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       "/api":{
-        target:"/",
+        target:"http://localhost:3000",
         changeOrigin: true,
         pathRewrite:{
           "/api" : "/"
@@ -40,7 +40,6 @@ module.exports = {
     // set this to false - it *may* help
     // https://vue-loader.vuejs.org/en/options.html#cachebusting
     cacheBusting: true,
-
     cssSourceMap: true
   },
 

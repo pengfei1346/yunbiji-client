@@ -1,47 +1,43 @@
 <template>
   <div>
     <Header/>
-
-    <div class="news">
-      <div class="sea">
-        <input type="text" placeholder="请输入关键字">
-        <button>搜索</button>
-      </div>
-
-      <div class="new-top">
-
-        <div class="detail-left">
-          <img src="../assets/63d0f703918fa0ece5f167da2a9759ee3d6ddb37.jpg"
-               style="height: 80px;width: 80px;">
-        </div>
-
-        <div class="detail-right">
-          <div class="biJi">
-            <span type>笔记丸子</span>
-            <span>轻弹VUE</span>
-          </div>
-          <div class="liuLan">
-            <span>浏览:333</span>
-            <span>回复:123</span>
-            <span>分类:飒飒打撒</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="new-bottom">
-        safuhnuisajkfnjasniuab黁伏笔u是电脑发u你发i翻版大家按时
-        发囧事阿素福啊开始发随你负阿森纳三年黁伏笔u是电脑发u你发i翻版大家按时
-        发囧事阿素福啊开始发随你负阿森纳三年黁伏笔u是电脑发u你发i翻版大家按时
-        发囧事阿素福啊开始发随你负阿森纳三年黁伏笔u是电脑发u你发i翻版大家按时
-        发囧事阿素福啊开始发随你负阿森纳三年
-      </div>
-
+    <div class="head">
+      <input type="text" v-model="seekTitle">
+      <button @click="handleSeek">搜索</button>
     </div>
+
+    <div class="news" v-for="item in noteList" :key="item.index">
+
+      <router-link :to="'/detail?id='+item._id">
+        <div class="new-top">
+
+          <div class="detail-left">
+            <img src="../assets/63d0f703918fa0ece5f167da2a9759ee3d6ddb37.jpg"
+                 style="height: 80px;width: 80px;">
+          </div>
+          <div class="detail-right">
+            <div class="biJi">
+              <span type>{{item.username}}</span>
+              <span>{{item.title}}</span>
+            </div>
+            <div class="liuLan">
+              <span>浏览:{{item.browse}}</span>
+              <span>回复:{{item.reply}}</span>
+              <span>分类:{{item.classify}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="new-bottom" v-html="item.note"></div>
+
+      </router-link>
+    </div>
+
   </div>
 </template>
 
 <script>
   import Header from '../components/Header'
+  import axios from 'axios'
 
   export default {
     name: "seach",
@@ -49,25 +45,62 @@
       Header
     },
     data() {
-      return {}
+      return {
+        noteList: [],
+        seekTitle: "",
+        userStatus:{},
+        replyContent: ""
+      }
+    },
+    methods: {
+      getList() {
+        axios.get('/api/note/list').then(res => {
+          // console.log(res.data);
+          this.noteList = res.data.data;
+        })
+      },
+      handleSeek() {
+        let title = this.seekTitle;
+        axios.post('/api/note/seek', {title}).then(res => {
+          console.log(res.data);
+          this.noteList = res.data.data;
+        })
+      },
+      getUser() {
+        axios.get('/api/getMsg').then(res => {
+          // console.log(res.data);
+          this.userStatus=res.data.data
+        })
+      }
+    },
+    mounted() {
+      this.getList();
+      this.getUser();
     }
   }
 </script>
 
 <style scoped lang="less">
+  .head {
+    text-align: center;
+    width: 1100px;
+    margin: 20px auto;
+    input {
+      width: 600px;
+      height: 40px;
+    }
+    button {
+      width: 100px;
+      height: 40px;
+    }
+  }
+
   .news {
+    cursor: pointer;
     width: 770px;
     margin: 30px auto;
-    .sea{
+    .sea {
       margin: 20px 0;
-      input{
-        width: 600px;
-        height: 40px;
-      }
-      button{
-        width: 100px;
-        height: 40px;
-      }
     }
     .new-top {
       height: 100px;

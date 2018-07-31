@@ -1,5 +1,5 @@
-export default {
-  login: "/login",
-  out: "/out",
-  getInfo: "/getInfo",
-}
+// export default {
+//   login: "/login",
+//   out: "/out",
+//   getInfo: "/getInfo",
+// }
